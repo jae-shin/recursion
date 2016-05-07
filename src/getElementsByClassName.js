@@ -7,9 +7,10 @@
 var getElementsByClassName = function(className) {
   // your code here
   // document.body, element.childNodes, element.classList
-  var result = [];
-
+  
   var recursiveFunc = function(element, className) {
+    var result = [];
+
     // check element itself
     var classList = element.classList;
     if (classList && classList.contains(className)) {
@@ -17,18 +18,19 @@ var getElementsByClassName = function(className) {
     }
 
     var childNodes = element.childNodes;
+    
     // Base case
     // check if childNodes is null
     if (!childNodes) {
-      return;
+      return result;
     }
 
     // Recursive case
     _.each(childNodes, function(item) {
-      recursiveFunc(item, className);
+      result = result.concat(recursiveFunc(item, className));
     });
+    return result;
   };
 
-  recursiveFunc(document.body, className);
-  return result;
+  return recursiveFunc(document.body, className);
 };
