@@ -9,10 +9,70 @@ var parseJSON = function(json) {
   var length = json.length;
 
   // current charactor position of the json
-  var charPos = 0;
+  var pos = 0;
 
-  var nextChar = function(charPos) {
-    return json[charPos + 1];
+  // returns next char that is not a irrelevant space
+  var nextChar = function() {
+    // TODO: need to account for spaces
+    // 
+    return json[pos];
+  };
+
+  var findPos = function(str) {
+    if (str)
+  };
+
+  var parseObject = function(str) {
+    pos++;
+
+    if (nextChar() === '}') {
+      return {};
+    } else {
+      return parseMember(str.slice(1, -1));
+    }
+  };
+
+  var parseMember = function(str, obj) {
+    obj = obj || {};
+
+    if (str.length === 0) {
+      return obj;
+    }
+    
+    pos++;
+    while (nextChar() !== '\"') {
+      pos++;
+    }
+    while (nextChar() !== ':') {
+      pos++;
+    }
+    var end = findPos();
+    obj = _.extend(obj, parsePair(str.slice(0, findPos() + 1)));
+    while (nextChar() !== ',') {
+      pos++;
+    }
+    while (nextChar() === ' ') {
+      pos++;
+    }
+    return parseMember(str.slice(pos), obj);
+  };
+
+  var parsePair = function(str, obj) {
+
+
+  };
+
+  var parseArray = function(str) {
+    var result = [];
+
+    if (nextChar() === ']') {
+      return result;
+    } else {
+      if (nextChar() === '\"') {
+
+      }
+    }
+    
   };
 
   var parseString = function(str) {
@@ -23,25 +83,29 @@ var parseJSON = function(json) {
     return Number(str);
   };
 
-  // Figure out the top level value
-  switch (json[0]) {
-  case '\"':
-    return parseString(json.slice(1, length - 2));
-    break;
-  case '{':
+  // var charTest = function(pos) {
+  //   if (json[pos] === '[') {
+  //     return parseArray(json.slice(pos + 1));
+  //   } else if (json[pos] === '{') {
+  //     return parseObject(json.slice(pos + 1));
+  //   }
+  // };
 
-  default:
-    break;
-  }
+  // return charTest(0);
   
-  '\"'
+  if (json[0] === '[') {
+    return parseArray(json);
+  } else if (json[0] === '{') {
+    return parseObject(json);
+  } 
+
+/*  '\"'
   '9' // number -, 0~9
   '{'
   '['
   't' // true
   'f' // false
   'n' // null
-
-
+*/
 
 };
